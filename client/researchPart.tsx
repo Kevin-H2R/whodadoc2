@@ -26,24 +26,54 @@ const ResearchPart = () => {
     "Public Health Center": "보건소"
   }
 
+  const showOnNaver = () => {
+    if (!selected) return
+    const encodedSearchTerm = encodeURIComponent(engToKrHospitals[selected]);
+    const naverMapWebsiteUrl = `https://map.naver.com/v5/search/${encodedSearchTerm}`;
+    const naverMapAppUrl = `nmap://search?query=${encodedSearchTerm}`;
+
+    // Check if the user is on a mobile device
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // Try to open the Naver Map app
+      window.location.href = naverMapAppUrl;
+
+      // If the app is not available, fall back to the website after a short delay
+      setTimeout(() => {
+        window.location.href = naverMapWebsiteUrl;
+      }, 500);
+    } else {
+      // Open the Naver Map website on desktop
+      window.open(naverMapWebsiteUrl, '_blank');
+    }
+  };
+
   return <div className="flex flex-col">
-    <div className="flex flex-wrap">
+    <div className="flex flex-wrap gap-2">
       {Object.keys(engToKrHospitals).map(en => {
-        return selected !== en ?
-        <button key={'hospital_' + en.replaceAll(' ', '')} className="rounded-md px-3.5 py-2 m-1 overflow-hidden relative group cursor-pointer border-2 font-medium border-pink-400 text-white" onClick={() => {setSelected(en)}}>
-          <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45  bg-pink-400 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease" ></span>
-          <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45  bg-pink-400 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease" ></span>
-          <span className="relative text-pink-400 transition duration-300 group-hover:text-white ease">{en}</span>
-        </button> :
-        <button key={'hospital_' + en.replaceAll(' ', '')} className="rounded-md px-3.5 py-2 m-1 overflow-hidden relative group cursor-pointer border-2 font-medium border-pink-400 text-white bg-pink-400">{en}</button>
+        return <button key={'hospital_' + en.replaceAll(' ', '')}
+          className={selected === en ? "rounded border border-pink-500 bg-pink-400 px-3 py-2 text-white" :
+              "rounded border border-pink-400 bg-pink-300 px-3 py-2 text-white"}
+          onClick={() => {setSelected(en)}}
+          >
+          {en}
+        </button>
+        // return selected !== en ?
+        // <button key={'hospital_' + en.replaceAll(' ', '')} className="rounded-md px-3.5 py-2 m-1 overflow-hidden relative group cursor-pointer border-2 font-medium border-pink-400 text-white" onClick={() => {setSelected(en)}}>
+        //   <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45  bg-pink-400 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease" ></span>
+        //   <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45  bg-pink-400 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease" ></span>
+        //   <span className="relative text-pink-400 transition duration-300 group-hover:text-white ease">{en}</span>
+        // </button> :
+        // <button key={'hospital_' + en.replaceAll(' ', '')} className="rounded-md px-3.5 py-2 m-1 overflow-hidden relative group cursor-pointer border-2 font-medium border-pink-400 text-white bg-pink-400">{en}</button>
       })}
     </div>
     {selected && <div className=" mt-10 flex flex-col w-full items-center">
       <div>You are looking for a:</div>
       <div className="text-5xl my-5">{engToKrHospitals[selected]}</div>
-      <button className="rounded px-5 py-2.5 mt-10 w-full sm:w-1/2 md:w-1/3 overflow-hidden group bg-pink-500 relative hover:bg-gradient-to-r hover:from-pink-500 hover:to-pink-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-pink-400 transition-all ease-out duration-300">
+      <button className="shadow-xl rounded px-5 py-2.5 mt-10 w-full sm:w-1/2 md:w-1/3 overflow-hidden group bg-pink-500 relative hover:bg-gradient-to-r hover:from-pink-500 hover:to-pink-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-pink-400 transition-all ease-out duration-300">
       <span className="absolute right-0 w-8 h-32 -mt-12 transition-all duration-500 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-96 ease"></span>
-      <span className="relative">Show me on naver</span>
+      <span className="relative" onClick={showOnNaver}>Find around me</span>
     </button>
   </div>}
 
