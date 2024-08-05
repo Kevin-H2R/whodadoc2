@@ -58,7 +58,7 @@ const ResearchPart = () => {
   }
 
   return <div className="flex flex-col items-center">
-    <div className="flex flex-wrap gap-2 w-full md:w-2/3 xl:w-1/2 justify-center">
+    <div className="flex flex-wrap gap-2 w-full md:w-2/3 justify-center">
       {Object.keys(engToKrHospitals).map(en => {
         return <button key={'hospital_' + en.replaceAll(' ', '')}
           className={selected === en ? "rounded-full border border-pink-500 bg-pink-400 px-3 py-2 text-white w-2/5 md:w-auto" :
@@ -71,7 +71,7 @@ const ResearchPart = () => {
     </div>
     {selected && <div className=" mt-10 flex flex-col w-full items-center">
       <div>You are looking for a:</div>
-      <div className="text-5xl my-5 cursor-pointer" onClick={copyToClipboard}>
+      <div className="text-5xl my-5 font-bold cursor-pointer" onClick={copyToClipboard}>
         {engToKrHospitals[selected]}
       </div>
       <button className="shadow-xl rounded px-5 py-2.5 mt-10 w-full sm:w-1/2 md:w-1/3 overflow-hidden group bg-pink-500 relative hover:bg-gradient-to-r hover:from-pink-500 hover:to-pink-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-pink-400 transition-all ease-out duration-300"
